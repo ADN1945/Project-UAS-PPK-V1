@@ -1,3 +1,4 @@
+//hallo
 var Application = {
 	initApplication : function() {
 		$(window).load('pageinit', '#page-one', function() {
