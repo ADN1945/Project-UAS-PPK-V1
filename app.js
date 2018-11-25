@@ -12,7 +12,18 @@ var Application = {
             var query = $("#boxSearch").val();
             var sort = $("#sort :selected").val();
             Application.initShowSearchResult(query,sort);
+		  })
+		  $(document).on('click', '#btnViewMode', function (){
+			var chosenTheme = $("#btnViewMode :selected").val();
+            Application.changeTheme(chosenTheme);
       	})
+	},
+
+	changeTheme : function(chosenTheme){
+		$("#list-berita").buttonMarkup({theme: chosenTheme});
+		$("#header").buttonMarkup({theme: chosenTheme});
+		
+		//alert($("#list-berita").attr("data-theme"));
 	},
 
 	initShowSearchResult : function(query,sort) {
@@ -39,12 +50,13 @@ var Application = {
 							dataObject.articles[i].description = "";
 						}
 
-						var appendList = '<li><a href="'+ dataObject.articles[i].url +'"><h2>'+dataObject.articles[i].source.name+
-						'</h2><p><b>'+
+						var appendList = '<li><a href="'+ dataObject.articles[i].url +
+						'"><div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
+						dataObject.articles[i].urlToImage +
+					    '"></div><h2>'+dataObject.articles[i].source.name+
+						'</h2><p><b>'+ 
 						dataObject.articles[i].title+
-						'<div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
-						 dataObject.articles[i].urlToImage +
-						'"></div></b></p><p>'+dataObject.articles[i].description+'</p></li>';
+						'</b></p><p>'+dataObject.articles[i].description+'</p></a></li>';
 						$('#list-berita').append(appendList);
 						$('#list-berita').listview('refresh');
 					}
@@ -78,16 +90,13 @@ var Application = {
 				}
 				if(konten.children().length == 0){
 					for(var i=0; i<dataObject.articles.length; i++){
-						if(dataObject.articles[i].description == null){
-							dataObject.articles[i].description = "";
-						}
-
-						var appendList = '<li><a href="'+ dataObject.articles[i].url +'"><h2>'+dataObject.articles[i].source.name+
-						'</h2><p><b>'+
+						var appendList = '<li><a href="'+ dataObject.articles[i].url +
+						'"><div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
+						dataObject.articles[i].urlToImage +
+					    '"></div><h2>'+dataObject.articles[i].source.name+
+						'</h2><p><b>'+ 
 						dataObject.articles[i].title+
-						'<div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
-						 dataObject.articles[i].urlToImage +
-						'"></div></b></p><p>'+dataObject.articles[i].description+'</p></li>';
+						'</b></p><p>'+dataObject.articles[i].description+'</p></a></li>';
 						$('#list-berita').append(appendList);
 						$('#list-berita').listview('refresh');
 					}
@@ -108,7 +117,7 @@ var Application = {
 			type : 'get',
 			beforeSend : function() {
 				$.mobile.loading('show', {
-					text : 'Please wait while retrievsdasdas..',
+					text : 'Please wait while retrieve..',
 					textVisible : true
 					
 				});
