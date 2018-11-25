@@ -3,11 +3,16 @@ var Application = {
 		$(window).load('pageinit', '#page-one', function() {
 			var country = "id";
 			Application.initShowBerita(country);
-		})
+		  })
 		$('#country').change(function (){
             var country = $("#country :selected").val();
             Application.initShowBerita(country);
-      	})
+		  })
+		$('#category').change(function (){
+			var category = $("#category :selected").val();
+			var country = $("#country :selected").val();
+            Application.initShowCatResult(country,category);
+      	  })
 		$(document).on('click', '#btnSearch', function (){
             var query = $("#boxSearch").val();
             var sort = $("#sort :selected").val();
@@ -15,15 +20,67 @@ var Application = {
 		  })
 		  $(document).on('click', '#btnViewMode', function (){
 			var chosenTheme = $("#btnViewMode :selected").val();
-            Application.changeTheme(chosenTheme);
+			var oldTheme = document.getElementById("header").classList.item(0);
+            Application.changeTheme(oldTheme,chosenTheme);
       	})
 	},
 
-	changeTheme : function(chosenTheme){
-		$("#list-berita").buttonMarkup({theme: chosenTheme});
-		$("#header").buttonMarkup({theme: chosenTheme});
-		
+	changeTheme : function(oldTheme,chosenTheme){
+		var header = document.getElementById("header");
+		var kontenBerita = document.getElementById("list-berita");
+
+		header.classList.replace(oldTheme,chosenTheme);
+		kontenBerita.classList.replace(oldTheme,chosenTheme);	
+		//element.classList.remove("headerStyle");
+		//element.classList.add("headerStyleDark");
+		//$("#list-berita").buttonMarkup({theme: chosenTheme});
+		//$("#header").buttonMarkup({theme: chosenTheme});
 		//alert($("#list-berita").attr("data-theme"));
+	},
+
+	initShowCatResult : function(country,category) {
+		$.ajax({
+			url: 'https://newsapi.org/v2/top-headlines?' +
+				'country='+country+'&' +
+				'category='+category+'&' +
+				'apiKey=1231536b76ed409a9707dde28b99c895',
+			type: 'get',
+			beforeSend : function(){
+				$.mobile.loading('show', {
+					text : 'Please wait while retrieving data...',
+					textVisible : true
+				});
+			},
+			success : function(dataObject){
+				var konten = $("#list-berita");
+				if(konten.children().length != 0){
+					konten.empty();
+				}
+				if(konten.children().length == 0){
+					for(var i=0; i<dataObject.articles.length; i++){
+						if(dataObject.articles[i].description == null){
+							dataObject.articles[i].description = "";
+						}
+
+						var appendList = '<div class="article kontenBerita"><a href="'+ dataObject.articles[i].url +
+						'"><div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
+						dataObject.articles[i].urlToImage +
+					    '"></div><div><h2>'+dataObject.articles[i].source.name+
+						'</h2></a><p><b>'+ 
+						dataObject.articles[i].title+
+						'</b></p><p>'+dataObject.articles[i].description+'</p></div></div>';
+						$('#list-berita').append(appendList);
+						
+					}
+				}
+				$(".img-berita").on("error",function(){
+					$(this).attr('src','image/news-default.jpeg');
+				});
+			},
+			complete : function() {
+				$.mobile.loading('hide');
+			}
+		});
 	},
 
 	initShowSearchResult : function(query,sort) {
@@ -50,15 +107,15 @@ var Application = {
 							dataObject.articles[i].description = "";
 						}
 
-						var appendList = '<li><a href="'+ dataObject.articles[i].url +
+						var appendList = '<div class="article kontenBerita"><a href="'+ dataObject.articles[i].url +
 						'"><div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
 						dataObject.articles[i].urlToImage +
-					    '"></div><h2>'+dataObject.articles[i].source.name+
-						'</h2><p><b>'+ 
+					    '"></div><div><h2>'+dataObject.articles[i].source.name+
+						'</h2></a><p><b>'+ 
 						dataObject.articles[i].title+
-						'</b></p><p>'+dataObject.articles[i].description+'</p></a></li>';
+						'</b></p><p>'+dataObject.articles[i].description+'</p></div></div>';
 						$('#list-berita').append(appendList);
-						$('#list-berita').listview('refresh');
+						
 					}
 				}
 				$(".img-berita").on("error",function(){
@@ -90,15 +147,15 @@ var Application = {
 				}
 				if(konten.children().length == 0){
 					for(var i=0; i<dataObject.articles.length; i++){
-						var appendList = '<li><a href="'+ dataObject.articles[i].url +
+						var appendList = '<div class="article kontenBerita"><a href="'+ dataObject.articles[i].url +
 						'"><div><img class="ui-corner-all ui-overlay-shadow img-thumbnail img-fluid img-berita" src="'+
 						dataObject.articles[i].urlToImage +
-					    '"></div><h2>'+dataObject.articles[i].source.name+
-						'</h2><p><b>'+ 
+					    '"></div><div class=""><h2>'+dataObject.articles[i].source.name+
+						'</h2></a><p><b>'+ 
 						dataObject.articles[i].title+
-						'</b></p><p>'+dataObject.articles[i].description+'</p></a></li>';
+						'</b></p><p>'+dataObject.articles[i].description+'</p></div></div>';
 						$('#list-berita').append(appendList);
-						$('#list-berita').listview('refresh');
+						
 					}
 				}
 				$(".img-berita").on("error",function(){

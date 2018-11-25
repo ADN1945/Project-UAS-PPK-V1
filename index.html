@@ -13,7 +13,7 @@
 <body>
 
 	<div data-role="page" id="page-one"> <!-------------------------------------------------- Halaman Ke-1 -->
-		<div data-role="header" id="header" data-theme="a">
+		<div class="LightStyle" id="header">
 			<h1 id="judul">MyNews</h1>
 			<p id="credit">Powered By: NewsApi.org</p>
 		</div>
@@ -30,21 +30,32 @@
 						</select>
 						<button type="submit" id="btnSearch">Submit</button>
 				</div>
-			</fieldset>
+		</fieldset>
 
-				
 				<select name="country" class="select-choice-0" id="country">
 					<option value="id">Indonesia</option>
 					<option value="us">United States</option>				
 				</select>
+
+				
+				<select name="category" class="select-choice-0" id="category">
+						<option value="none">All Categories</option>
+						<option value="business">Business</option>
+						<option value="entertainment">Entertainment</option>				
+						<option value="health">Health</option>				
+						<option value="science">Science</option>
+						<option value="sports">Sports</option>
+						<option value="technology">Technology</option>
+				</select>
+
 				<select name="sortBy" class="select-choice-0" id="btnViewMode">
-						<option value="a">Light Mode</option>
-						<option value="b">Dark Mode</option>				
+						<option value="LightStyle">Light Mode</option>
+						<option value="DarkStyle">Dark Mode</option>				
 				</select>
 		</div>
 
 		<div role="main" class="ui-content">	
-			<ul data-role="listview" id="list-berita" data-role="listview" data-theme="a">
+			<ul class="LightStyle" id="list-berita" >
 				<!-- Akan diisi JSON -->
 			</ul>
 		</div>
