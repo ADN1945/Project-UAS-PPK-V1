@@ -189,7 +189,7 @@ var Application = {
 			},
 			complete : function() {
 				$.mobile.loading('hide');
-			}
+			}//test
 		});
 	}
 };
